@@ -11,14 +11,14 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 echo 'Installing Python dependencies...'
-                sh 'pip install -r requirements.txt'
+                bat 'pip install -r requirements.txt'
             }
         }
         
         stage('Run application') {
             steps {
                 echo 'Running the Weather App...'
-                sh 'python weather_app.py'
+                bat 'python weather_app.py'
             }
         }
     }
