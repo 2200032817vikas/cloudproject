@@ -1,39 +1,47 @@
 pipeline {
     agent any
+
+    environment {
+        PYTHON_HOME = 'C:\\Users\\mvssns prasadrao\\AppData\\Local\\Programs\\Python\\Python313'
+    }
+
     stages {
         stage('Clone') {
             steps {
                 echo 'Cloning repository...'
-                // SCM checkout already happens automatically
+                // SCM checkout happens automatically
             }
         }
+
         stage('Check Python and Pip') {
             steps {
                 echo 'Checking Python and pip installation...'
                 bat '''
-                    python --version
+                    "%PYTHON_HOME%\\python.exe" --version
                     if %ERRORLEVEL% NEQ 0 (
-                        echo Python is NOT installed. Please install Python and add it to PATH.
+                        echo Python is NOT found at %PYTHON_HOME%.
                         exit /b 1
                     )
-                    pip --version
+                    "%PYTHON_HOME%\\Scripts\\pip.exe" --version
                     if %ERRORLEVEL% NEQ 0 (
-                        echo Pip is NOT installed. Please install pip and add it to PATH.
+                        echo Pip is NOT found at %PYTHON_HOME%.
                         exit /b 1
                     )
                 '''
             }
         }
+
         stage('Install dependencies') {
             steps {
                 echo 'Installing Python dependencies...'
-                bat 'python -m pip install -r requirements.txt'
+                bat '"%PYTHON_HOME%\\Scripts\\pip.exe" install -r requirements.txt'
             }
         }
+
         stage('Run application') {
             steps {
                 echo 'Running the application...'
-                bat 'weather_app.py' // Change this to your actual run command
+                bat '"%PYTHON_HOME%\\python.exe" weather_app.py'
             }
         }
     }
